@@ -37,10 +37,17 @@ readinessProbe:
   initialDelaySeconds: 5
   periodSeconds: 5
 
-# ServiceAccount settings (fix for Helm error)
+# ServiceAccount settings
 serviceAccount:
   create: true
   name: ""
+
+# Ingress settings (disabled)
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls: []
 
 # Optional: Pod labels and annotations
 podLabels: {}
