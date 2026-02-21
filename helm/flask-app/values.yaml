@@ -49,6 +49,13 @@ ingress:
   hosts: []
   tls: []
 
+# HTTPRoute settings (disabled)
+httpRoute:
+  enabled: false
+  hosts: []
+  annotations: {}
+  tls: []
+
 # Optional: Pod labels and annotations
 podLabels: {}
 podAnnotations: {}
