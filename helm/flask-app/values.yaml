@@ -9,7 +9,7 @@ image:
 
 # Service settings
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 5000
 
 # Resource requests and limits
