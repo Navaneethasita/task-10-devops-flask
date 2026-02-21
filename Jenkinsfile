@@ -49,6 +49,26 @@ pipeline {
             }
         }
 
+        stage('Test Credentials') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'aws-creds',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
+                    sh 'aws sts get-caller-identity'
+                }
+        
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_USER'
+                }
+            }
+        }
+        
         stage('Deploy to Kubernetes using Helm') {
             steps {
                 // Use AWS credentials for EKS authentication
