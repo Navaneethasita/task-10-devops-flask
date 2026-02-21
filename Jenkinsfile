@@ -35,6 +35,17 @@ pipeline {
             }
         }
 
+        stage('Debug Kubernetes Access') {
+            steps {
+                sh '''
+                whoami
+                echo "HOME=$HOME"
+                ls -la ~/.kube
+                kubectl get nodes
+                '''
+            }
+        }        
+
         stage('Docker Hub Login') {
             steps {
                 withCredentials([usernamePassword(
