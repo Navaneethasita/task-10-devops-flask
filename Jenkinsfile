@@ -85,7 +85,16 @@ pipeline {
                             --set image.tag=$IMAGE_TAG
                     """
                 }
-                {
+            }
+        }
+
+         stage('Print App URL') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'aws-creds', 
+                    usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
                     sh """
                         NODEPORT=\$(kubectl get svc flask-app -o jsonpath='{.spec.ports[0].nodePort}')
                         PUBLIC_IP=\$(aws ec2 describe-instances \\
