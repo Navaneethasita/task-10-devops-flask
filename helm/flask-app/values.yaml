@@ -1,5 +1,3 @@
-
-
 replicaCount: 1
 
 image:
@@ -20,11 +18,15 @@ resources:
     memory: "256Mi"
 
 livenessProbe:
-  path: /
+  httpGet:
+    path: /
+    port: 5000
   initialDelaySeconds: 10
   periodSeconds: 10
 
 readinessProbe:
-  path: /
+  httpGet:
+    path: /
+    port: 5000
   initialDelaySeconds: 5
   periodSeconds: 5
