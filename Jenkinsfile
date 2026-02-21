@@ -85,6 +85,16 @@ pipeline {
                             --set image.tag=$IMAGE_TAG
                     """
                 }
+                {
+                    sh """
+                        NODEPORT=\$(kubectl get svc flask-app -o jsonpath='{.spec.ports[0].nodePort}')
+                        PUBLIC_IP=\$(aws ec2 describe-instances \\
+                            --instance-ids \$(curl -s http://169.254.169.254/latest/meta-data/instance-id) \\
+                            --query 'Reservations[0].Instances[0].PublicIpAddress' \\
+                            --output text)
+                        echo "✅ Your Flask app is live at: http://\$PUBLIC_IP:\$NODEPORT"
+                    """
+                }
             }
         }
     }
