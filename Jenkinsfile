@@ -6,64 +6,75 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     stages {
 
         stage('Checkout Code') {
             steps {
-                checkout scm
+                git branch: 'main',
+                    url: 'https://github.com/Navaneethasita/task-10-devops-flask.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh """
+                sh '''
                 docker build -t $DOCKER_IMAGE:$IMAGE_TAG .
-                """
+                '''
             }
         }
 
-        stage('Trivy Scan') {
+        stage('Trivy Security Scan') {
             steps {
-                sh """
+                sh '''
                 trivy image --exit-code 1 --severity HIGH,CRITICAL $DOCKER_IMAGE:$IMAGE_TAG
-                """
+                '''
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Docker Hub Login') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh """
+                    sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    """
+                    '''
                 }
             }
         }
 
-        stage('Push Image') {
+        stage('Push Docker Image') {
             steps {
-                sh """
+                sh '''
                 docker push $DOCKER_IMAGE:$IMAGE_TAG
-                """
+                '''
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Kubernetes using Helm') {
             steps {
-                sh """
+                sh '''
                 helm upgrade --install flask-app ./helm/flask-app \
                 --set image.repository=$DOCKER_IMAGE \
                 --set image.tag=$IMAGE_TAG
-                """
+                '''
             }
         }
     }
 
     post {
+        success {
+            echo "Deployment Successful 🚀"
+        }
+        failure {
+            echo "Pipeline Failed ❌"
+        }
         always {
             sh 'docker image prune -f'
         }
