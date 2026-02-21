@@ -11,7 +11,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'master', url: 'https://github.com/Navaneethasita/task-10-devops-flask.git'
+                git branch: 'main', url: 'https://github.com/Navaneethasita/task-10-devops-flask.git'
             }
         }
 
