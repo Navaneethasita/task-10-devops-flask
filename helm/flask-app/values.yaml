@@ -56,6 +56,13 @@ httpRoute:
   annotations: {}
   tls: []
 
+# Autoscaling settings (disabled)
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 50
+
 # Optional: Pod labels and annotations
 podLabels: {}
 podAnnotations: {}
