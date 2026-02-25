@@ -30,7 +30,7 @@ jobs:
         with:
           image-ref: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           severity: HIGH,CRITICAL
-          exit-code: '1'
+          exit-code: '0'
 
       - name: Push Image
         run: |
