@@ -14,7 +14,7 @@ REQUEST_COUNT = metrics.counter(
 
 @app.route("/")
 def home():
-    REQUEST_COUNT.inc()  # increment custom counter
+      # increment custom counter
     return "DevOps Flask App Running 🚀"
 
 @app.route("/health")
